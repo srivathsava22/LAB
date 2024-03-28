@@ -1,0 +1,19 @@
+utils:::menuInstallPkgs()
+q()
+library(dplyr)
+library(caret)
+oulad_data <- read.csv("C:\\Users\\Home\\Downloads\\oulad-students.csv")
+oulad_data$final_result <- as.factor(oulad_data$final_result)
+set.seed(123)  # For reproducibility
+train_indices <- sample(1:nrow(oulad_data), 0.9 * nrow(oulad_data))
+train_data <- oulad_data[train_indices, ]
+test_data <- oulad_data[-train_indices, ]
+logit_model <- glm(final_result ~ ., data = train_data, family = binomial(link = "logit"))
+test_predictions <- predict(logit_model, newdata = test_data, type = "response")
+threshold <- 0.5
+predicted_classes <- ifelse(test_predictions > threshold, "Pass", "Fail")
+actual_classes <- test_data$final_result
+ccuracy <- sum(predicted_classes == actual_classes) / length(actual_classes)
+cat("Accuracy on test set:", accuracy, "\n")
+accuracy <- sum(predicted_classes == actual_classes) / length(actual_classes)
+cat("Accuracy on test set:", accuracy, "\n")
